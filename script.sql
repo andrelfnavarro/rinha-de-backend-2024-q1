@@ -1,11 +1,11 @@
 CREATE TABLE clients (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     limite INT NOT NULL,
     saldo INT NOT NULL
 );
 
 CREATE TABLE transactions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     client_id INT,
     valor INT NOT NULL,
     tipo CHAR(1) NOT NULL,
