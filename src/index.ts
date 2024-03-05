@@ -20,6 +20,10 @@ app.get('/', async (_req, res) => {
     });
 });
 
+app.get('/clientes/:id/extrato', async (_req, res) => {
+  res.send({ status: 'ok', message: 'Extrato' });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${container_id}`);
 });
