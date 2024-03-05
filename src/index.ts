@@ -18,10 +18,6 @@ app.get('/', async (_req, res) => {
         )}`,
       });
     });
-
-  res.send({
-    message: `Hello from ${container_id}!`,
-  });
 });
 
 app.listen(PORT, () => {

@@ -10,7 +10,7 @@ CREATE TABLE transactions (
     valor INT NOT NULL,
     tipo CHAR(1) NOT NULL,
     descricao VARCHAR(10) NOT NULL,
-    realizada_em DATETIME NOT NULL,
+    realizada_em TIMESTAMP NOT NULL,
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
