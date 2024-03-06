@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { desc, eq } from 'drizzle-orm';
-import Ajv, { JSONSchemaType } from 'ajv';
+import { enums, integer, is, min, object, string } from 'superstruct';
 
 import { clients } from '../schema/clients';
 import { transactions } from '../schema/transactions';
@@ -41,16 +41,12 @@ router.get('/:id/extrato', async (req: Request, res: Response) => {
 
   const client = foundClients[0];
 
-  console.log(client);
-
   const lastTransactions = await db
     .select()
     .from(transactions)
-    // .where(eq(transactions.client_id, client.id))
+    .where(eq(transactions.client_id, client.id))
     .orderBy(desc(transactions.realizada_em))
     .limit(10);
-
-  console.log(lastTransactions);
 
   res.status(200).send({
     saldo: {
@@ -69,29 +65,14 @@ router.get('/:id/extrato', async (req: Request, res: Response) => {
   });
 });
 
-const ajv = new Ajv();
-
-type NewTransaction = {
-  valor: number;
-  tipo: 'd' | 'c';
-  descricao: string;
-};
-
-const clientTransactionSchema: JSONSchemaType<NewTransaction> = {
-  type: 'object',
-  properties: {
-    valor: { type: 'integer' },
-    tipo: { type: 'string', enum: ['d', 'c'] },
-    descricao: { type: 'string', minLength: 1, maxLength: 10 },
-  },
-  required: ['valor', 'tipo', 'descricao'],
-  additionalProperties: false,
-};
+const clientTransactionSchema = object({
+  valor: min(integer(), 0),
+  tipo: enums(['d', 'c']),
+  descricao: string(),
+});
 
 router.post('/:id/transacoes', async (req: Request, res: Response) => {
   const { id } = req.params;
-
-  console.log(req.body);
 
   if (!id) {
     return res.status(404).send({
@@ -99,14 +80,9 @@ router.post('/:id/transacoes', async (req: Request, res: Response) => {
     });
   }
 
-  const validateNewTransaction = ajv.compile(clientTransactionSchema);
-
-  const valid = validateNewTransaction(req.body);
-
-  if (!valid) {
+  if (!is(req.body, clientTransactionSchema)) {
     return res.status(400).send({
-      message: 'Invalid transaction',
-      errors: validateNewTransaction.errors,
+      message: 'Invalid request body',
     });
   }
 
