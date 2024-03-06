@@ -80,7 +80,7 @@ type NewTransaction = {
 const clientTransactionSchema: JSONSchemaType<NewTransaction> = {
   type: 'object',
   properties: {
-    valor: { type: 'number' },
+    valor: { type: 'integer' },
     tipo: { type: 'string', enum: ['d', 'c'] },
     descricao: { type: 'string', minLength: 1, maxLength: 10 },
   },
