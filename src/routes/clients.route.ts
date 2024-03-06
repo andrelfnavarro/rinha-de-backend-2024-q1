@@ -46,7 +46,7 @@ router.get('/:id/extrato', async (req: Request, res: Response) => {
   const lastTransactions = await db
     .select()
     .from(transactions)
-    // .where(eq(transactions.client_id, client.id))
+    .where(eq(transactions.client_id, client.id))
     .orderBy(desc(transactions.realizada_em))
     .limit(10);
 
