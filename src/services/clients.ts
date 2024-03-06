@@ -1,4 +1,4 @@
-import { enums, integer, is, min, object, string } from 'superstruct';
+import { enums, integer, is, min, object, string, size } from 'superstruct';
 
 import {
   getClient,
@@ -17,7 +17,7 @@ export type NewTransaction = {
 const clientTransactionSchema = object({
   valor: min(integer(), 0),
   tipo: enums(['d', 'c']),
-  descricao: string(),
+  descricao: size(string(), 1, 10),
 });
 
 
