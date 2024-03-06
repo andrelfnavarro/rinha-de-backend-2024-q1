@@ -6,7 +6,7 @@ CREATE TABLE clients (
 
 CREATE TABLE transactions (
     id SERIAL PRIMARY KEY,
-    client_id INT,
+    client_id INT NOT NULL,
     valor INT NOT NULL,
     tipo CHAR(1) NOT NULL,
     descricao VARCHAR(10) NOT NULL,

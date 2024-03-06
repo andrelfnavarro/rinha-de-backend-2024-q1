@@ -1,24 +1,16 @@
 import express, { type Application } from 'express';
-import { db } from './database';
-import { type Client, clients } from './schema/clients';
+
+import clientRouter from './routes/clients.route';
 
 const PORT = process.env.PORT || 8080;
 const container_id = process.env.HOSTNAME;
 
 const app: Application = express();
 
-app.get('/', async (_req, res) => {
-  await db
-    .select()
-    .from(clients)
-    .then((clients: Client[]) => {
-      res.send({
-        message: `Hello from ${container_id}! Clients: ${JSON.stringify(
-          clients
-        )}`,
-      });
-    });
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/clientes', clientRouter);
 
 app.get('/clientes/:id/extrato', async (_req, res) => {
   res.send({ status: 'ok', message: 'Extrato' });
