@@ -10,4 +10,8 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["npm", "run", "dev"]
+RUN npm run build
+
+ENV NODE_ENV=production
+
+CMD ["node", "build/index.js"]
