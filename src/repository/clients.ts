@@ -40,16 +40,14 @@ export const insertTransaction = async (
       realizada_em: new Date(),
     });
 
-    await tx.transaction(async tx2 => {
-      await tx2
-        .update(clients)
-        .set({
-          saldo:
-            transaction.tipo === 'd'
-              ? client.saldo - transaction.valor
-              : client.saldo + transaction.valor,
-        })
-        .where(eq(clients.id, Number(id)));
-    });
+    await tx
+      .update(clients)
+      .set({
+        saldo:
+          transaction.tipo === 'd'
+            ? client.saldo - transaction.valor
+            : client.saldo + transaction.valor,
+      })
+      .where(eq(clients.id, Number(id)));
   });
 };

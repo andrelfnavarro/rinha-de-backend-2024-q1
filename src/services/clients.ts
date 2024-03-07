@@ -1,4 +1,13 @@
-import { enums, integer, is, min, object, string, size } from 'superstruct';
+import {
+  enums,
+  integer,
+  is,
+  min,
+  object,
+  string,
+  size,
+  Infer,
+} from 'superstruct';
 
 import {
   getClient,
@@ -7,19 +16,13 @@ import {
 } from '../repository/clients';
 import { Transaction } from '../schema/transactions';
 
-
-export type NewTransaction = {
-  valor: number;
-  tipo: 'd' | 'c';
-  descricao: string;
-};
-
 const clientTransactionSchema = object({
   valor: min(integer(), 0),
   tipo: enums(['d', 'c']),
   descricao: size(string(), 1, 10),
 });
 
+export type NewTransaction = Infer<typeof clientTransactionSchema>;
 
 export const getExtrato = async (id: string) => {
   const client = await getClient(id);
